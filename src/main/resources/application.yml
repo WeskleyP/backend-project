@@ -1,0 +1,31 @@
+server:
+  port: ${SERVER_PORT:5500}
+  tomcat:
+    connection-timeout: 30000
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/db}
+    username: ${DB_USERNAME:user}
+    password: ${DB_PASSWORD:password}
+    hikari:
+      minimum-idle: ${HK_MINIMUM_IDLE:0}
+      maximum-pool-size: ${HK_MAXIMUM_SIZE:3}
+      connection-timeout: ${HK_CON_TIMEOUT:120000} # two minute for timeout
+      max-lifetime: ${HK_MAX_LIFE:600000} # ten minutes for maxLife
+      idle-timeout: ${HK_IDLE_TIMEOUT:60000} # one minute for idle connetion timeout
+      pool-name: ${HK_POOL_NAME:db-pool}
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    sql-migration-separator: _
+    locations: classpath:db/migration
+logging:
+  level:
+    ROOT: info
