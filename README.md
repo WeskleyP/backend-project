@@ -27,4 +27,6 @@ docker build . -t backend-project:1.0.0
 docker run --rm --network host -p 5500:5500 -it backend-project:1.0.0
 ```
 
-## Postman Collection
+## Database Scripts
+
+The scripts for database creation are in [this](src/main/resources/db/migration) folder, and they run with flyway to control database version
