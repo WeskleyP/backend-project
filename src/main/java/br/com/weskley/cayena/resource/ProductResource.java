@@ -3,7 +3,7 @@ package br.com.weskley.cayena.resource;
 import br.com.weskley.cayena.dto.ProductDTO;
 import br.com.weskley.cayena.dto.StockQuantityDTO;
 import br.com.weskley.cayena.model.Product;
-import br.com.weskley.cayena.service.impl.ProductServiceImpl;
+import br.com.weskley.cayena.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductResource {
 
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
     @GetMapping(path = "findAll")
     public ResponseEntity<List<Product>> findAllProducts() {
