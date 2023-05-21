@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 @Entity
@@ -23,14 +24,18 @@ public class Product {
     @Id
     @Column(name = "id")
     private Long id;
+    @NotNull(message = "Product name can't be null")
     @Column(name = "name")
     private String name;
-    @Column(name = "stock_quantity")
     @Min(value = 0)
+    @NotNull(message = "Product stock can't be null")
+    @Column(name = "stock_quantity")
     private Long stockQuantity;
-    @Column(name = "unit_price")
+    @NotNull(message = "Product unit price can't be null")
     @DecimalMin(value = "0.0")
+    @Column(name = "unit_price")
     private Double unitPrice;
+    @NotNull(message = "Product supplier can't be null")
     @ManyToOne
     @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplier;
