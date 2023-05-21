@@ -13,14 +13,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final Validator validator;
 
     @Override
     public List<Product> findAllProducts() {
@@ -39,7 +46,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(ProductDTO productDTO) {
-        return productRepository.save(ProductDTO.convertDTOtoEntity(productDTO));
+        Product product = ProductDTO.convertDTOtoEntity(productDTO);
+        validateProduct(product);
+        return productRepository.save(product);
     }
 
     @Override
@@ -49,7 +58,15 @@ public class ProductServiceImpl implements ProductService {
         product.setStockQuantity(productDTO.getStockQuantity());
         product.setSupplier(Supplier.builder().id(productDTO.getSupplierId()).build());
         product.setUnitPrice(productDTO.getUnitPrice());
+        validateProduct(product);
         return productRepository.save(product);
+    }
+
+    private void validateProduct(Product product) {
+        Set<ConstraintViolation<Product>> constraintViolations = validator.validate(product);
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
     }
 
     @Override
@@ -75,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
         } else if (stockQuantityDTO.getAction().equals(StockUpdateEnum.INCREASE)) {
             newStock = actualStock + stockQuantityDTO.getQuantity();
         }
-        if (newStock < 0) {
+        if (newStock == null || newStock < 0) {
             throw new NegativeStockException("Stock can't be negative");
         }
         product.setStockQuantity(newStock);

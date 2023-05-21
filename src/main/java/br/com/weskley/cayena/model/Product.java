@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 @Builder
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @NotNull(message = "Product name can't be null")

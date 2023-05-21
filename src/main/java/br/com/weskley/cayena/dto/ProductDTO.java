@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductDTO {
 
-    private Long id;
     private String name;
     private Long stockQuantity;
     private Double unitPrice;
@@ -21,23 +20,10 @@ public class ProductDTO {
 
     public static Product convertDTOtoEntity(ProductDTO productDTO) {
         return Product.builder()
-                .id(productDTO.getId())
                 .name(productDTO.getName())
                 .stockQuantity(productDTO.getStockQuantity())
                 .unitPrice(productDTO.getUnitPrice())
                 .supplier(Supplier.builder().id(productDTO.getSupplierId()).build())
                 .build();
-    }
-
-    private static ProductDTO convertEntityToDTO(Product product) {
-        ProductDTOBuilder builder = ProductDTO.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .stockQuantity(product.getStockQuantity())
-                .unitPrice(product.getUnitPrice());
-        if (product.getSupplier() != null) {
-            builder.supplierId(product.getSupplier().getId());
-        }
-        return builder.build();
     }
 }
